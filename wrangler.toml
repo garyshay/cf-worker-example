@@ -1,23 +1,29 @@
 #:schema node_modules/wrangler/config-schema.json
 name = "lintrack"
-
-compatibility_date = "2024-09-02"
-compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat_v2"]
 main="dist/_worker.js/index.js"
-[observability]
-enabled = true
 
-# production
-[[d1_databases]]
+# ================== production environment ====================================
+[env.prod]
+name = "lintrack"
+
+[[env.prod.d1_databases]]
 binding = "DB"
 database_name = "d1-demo-prod-db"
 database_id = "ca0e8d8b-0d5a-4c8d-8aab-d2523e960cb9"
-preview_database_id = "DB"
 
-# preview
-[env.preview]
-name = "preview"
-[[env.preview.d1_databases]]
+# ================== staging environment =======================================
+[env.staging]
+name = "lintrack-staging"
+
+[[env.staging.d1_databases]]
 binding = "DB"
 database_name = "d1-demo-preview-db"
 database_id = "7a4c5e0a-4226-4bf6-9de8-c812f464639f"
+
+# Workers Logs
+# Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
+# Configuration: https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs
+[observability]
+enabled = true
