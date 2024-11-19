@@ -1,5 +1,18 @@
 ---
+// src/pages/index.astro
+import { desc } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/d1";
+import { linkShare } from "../schema";
 
+const db = drizzle((Astro.locals as any)?.runtime?.env.DB);
+console.log(123,db)
+
+const links = await db
+	.select()
+	.from(linkShare)
+	.orderBy(desc(linkShare.created));
+
+console.log({links})
 ---
 
 <html lang="en">
@@ -11,6 +24,15 @@
 		<title>Astro</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<h1>Shared Links</h1>
+		<ul>
+			{
+				links.map((link) => (
+					<li>
+						<a href={link.url}>{link.title}</a>
+					</li>
+				))
+			}
+		</ul>
 	</body>
 </html>

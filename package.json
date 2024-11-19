@@ -7,11 +7,25 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "wrangler": "wrangler",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply d1-demo-prod-db --local",
+    "db:migrate:prod": "wrangler d1 migrations apply d1-demo-prod-db --remote",
+    "db:migrate:preview": "wrangler d1 migrations apply --env preview d1-demo-preview-db --remote"
   },
   "dependencies": {
-    "astro": "^4.16.13",
     "@astrojs/check": "^0.9.4",
+    "@astrojs/cloudflare": "^11.2.0",
+    "astro": "^4.16.13",
+    "drizzle-orm": "^0.36.3",
     "typescript": "^5.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "better-sqlite3": "^11.5.0",
+    "cross-env": "^7.0.3",
+    "drizzle-kit": "^0.28.1",
+    "wrangler": "^3.87.0"
   }
 }
