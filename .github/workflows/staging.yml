@@ -61,12 +61,16 @@ jobs:
           ENDOFFILE
 
       - name: Build
-        run:  pnpm build
+        run: pnpm build
+
+      - name: Database Migrate
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: "d1 migrations apply ${{ vars.staging_db }} --env ${{ vars.staging }} --remote | yes"
 
       - name: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: |
-            yes | pnpm wrangler d1 migrations apply ${{ vars.staging_db }} --env ${{ vars.staging }}  --remote
-            deploy --env ${{ vars.staging }}
+          command: "deploy --env ${{ vars.staging }}"
