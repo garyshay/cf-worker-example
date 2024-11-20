@@ -10,7 +10,7 @@ name = "lintrack"
 
 [[env.prod.d1_databases]]
 binding = "DB"
-database_name = "d1-demo-prod-db"
+database_name = "lintrack-prod-db"
 database_id = "ca0e8d8b-0d5a-4c8d-8aab-d2523e960cb9"
 
 # ================== staging environment =======================================
@@ -19,7 +19,7 @@ name = "lintrack-staging"
 
 [[env.staging.d1_databases]]
 binding = "DB"
-database_name = "d1-demo-staging-db"
+database_name = "lintrack-staging-db"
 database_id = "21dca118-4ced-4fdb-8b55-e2b61b21cfdc"
 
 # ================== dev environment ===========================================
@@ -28,7 +28,7 @@ name = "lintrack-dev"
 
 [[env.dev.d1_databases]]
 binding = "DB"
-database_name = "lintrack_dev_db"
+database_name = "lintrack-dev-db"
 database_id = "${lintrack_dev_db}"
 
 # Workers Logs

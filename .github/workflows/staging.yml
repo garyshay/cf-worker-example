@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - main
+      - staging
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -54,5 +54,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           command: |
-            d1 migrations apply --env ${{ vars.main }} ${{ vars.main_db }} --remote
-            deploy --env ${{ vars.main }}
+            d1 migrations apply --env ${{ vars.staging }} ${{ vars.staging_db }} --remote
+            deploy --env ${{ vars.staging }}
