@@ -64,7 +64,7 @@ jobs:
         run: pnpm build
 
       - name: Database Migrate
-        run: yes | pnpm d1 migrations apply ${{ vars.staging_db }} --env ${{ vars.staging }} --remote
+        run: yes | pnpm wrangler d1 migrations apply ${{ vars.staging_db }} --env ${{ vars.staging }} --remote
         env:
             CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
