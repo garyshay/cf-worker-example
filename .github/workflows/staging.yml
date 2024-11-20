@@ -10,50 +10,64 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
-        with: 
-          script: |
-            cat >wrangler.toml << ENDOFFILE
-                #:schema node_modules/wrangler/config-schema.json
-                name = "lintrack"
-                compatibility_date = "2024-09-23"
-                compatibility_flags = ["nodejs_compat_v2"]
-                main = "dist/_worker.js/index.js"
 
-                # ================== production environment ====================================
-                [env.prod]
-                name = "lintrack"
-
-                [[env.prod.d1_databases]]
-                binding = "DB"
-                database_name = "${{ vars.main_db }}"
-                database_id = "${{ vars.main_db_id }}"
-
-                # ================== staging environment =======================================
-                [env.staging]
-                name = "lintrack-staging"
-
-                [[env.staging.d1_databases]]
-                binding = "DB"
-                database_name = "${{ vars.staging_db }}"
-                database_id = "${{ vars.STAGING_DB_ID }}"
-
-                # Workers Logs
-                # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
-                # Configuration: https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs
-                [observability]
-                enabled = true
-            ENDOFFILE
-            cat wrangler.toml
-      - name: Install, build, and upload your site output
-        uses: withastro/action@v2
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
         with:
-          path: .
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
           node-version: 18
-          package-manager: pnpm@latest
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Create wrangler.toml
+        run: |
+          cat >wrangler.toml << ENDOFFILE
+              #:schema node_modules/wrangler/config-schema.json
+              name = "lintrack"
+              compatibility_date = "2024-09-23"
+              compatibility_flags = ["nodejs_compat_v2"]
+              main = "dist/_worker.js/index.js"
+
+              # ================== production environment ====================================
+              [env.prod]
+              name = "lintrack"
+
+              [[env.prod.d1_databases]]
+              binding = "DB"
+              database_name = "${{ vars.main_db }}"
+              database_id = "${{ vars.main_db_id }}"
+
+              # ================== staging environment =======================================
+              [env.staging]
+              name = "lintrack-staging"
+
+              [[env.staging.d1_databases]]
+              binding = "DB"
+              database_name = "${{ vars.staging_db }}"
+              database_id = "${{ vars.STAGING_DB_ID }}"
+
+              # Workers Logs
+              # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
+              # Configuration: https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs
+              [observability]
+              enabled = true
+          ENDOFFILE
+
+      - name: Build
+        run: |
+          pnpm build
+          pnpm wrangler d1 migrations apply --remote --env ${{ vars.staging }} ${{ vars.staging_db }}
+
       - name: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           command: |
-            d1 migrations apply --env ${{ vars.staging }} ${{ vars.staging_db }} --remote
             deploy --env ${{ vars.staging }}
