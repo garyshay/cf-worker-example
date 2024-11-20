@@ -43,7 +43,7 @@ jobs:
                 [observability]
                 enabled = true
             ENDOFFILE
-        cat wrangler.toml
+            cat wrangler.toml
       - name: Install, build, and upload your site output
         uses: withastro/action@v2
         with:
