@@ -2,7 +2,7 @@
 name = "lintrack"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat_v2"]
-main="dist/_worker.js/index.js"
+main = "dist/_worker.js/index.js"
 
 # ================== production environment ====================================
 [env.prod]
@@ -20,7 +20,16 @@ name = "lintrack-staging"
 [[env.staging.d1_databases]]
 binding = "DB"
 database_name = "d1-demo-staging-db"
-database_id = "7a4c5e0a-4226-4bf6-9de8-c812f464639f"
+database_id = "21dca118-4ced-4fdb-8b55-e2b61b21cfdc"
+
+# ================== dev environment ===========================================
+[env.dev]
+name = "lintrack-dev"
+
+[[env.dev.d1_databases]]
+binding = "DB"
+database_name = "lintrack_dev_db"
+database_id = "${lintrack_dev_db}"
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/

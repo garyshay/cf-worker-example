@@ -10,7 +10,7 @@
     "astro": "astro",
     "wrangler": "wrangler",
     "db:generate": "drizzle-kit generate",
-    "db:migrate:local": "wrangler d1 migrations apply d1-demo-prod-db --local",
+    "db:migrate:dev": "wrangler d1 migrations apply --env dev lintrack_dev_db --local",
     "db:migrate:prod": "wrangler d1 migrations apply --env prod d1-demo-prod-db --remote",
     "db:migrate:staging": "wrangler d1 migrations apply --env staging d1-demo-staging-db --remote"
   },
