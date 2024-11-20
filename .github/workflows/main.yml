@@ -30,28 +30,28 @@ jobs:
         run: |
           cat >wrangler.toml << ENDOFFILE
               #:schema node_modules/wrangler/config-schema.json
-              name = "lintrack"
+              name = "${{vars.CF_WORKER_NAME_PROD}}"
               compatibility_date = "2024-09-23"
               compatibility_flags = ["nodejs_compat_v2"]
               main = "dist/_worker.js/index.js"
 
               # ================== production environment ====================================
               [env.prod]
-              name = "lintrack"
+              name = "${{vars.CF_WORKER_NAME_PROD}}"
 
               [[env.prod.d1_databases]]
               binding = "DB"
-              database_name = "${{ vars.main_db }}"
-              database_id = "${{ vars.main_db_id }}"
+              database_name = "${{ vars.MAIN_DB }}"
+              database_id = "${{ vars.MAIN_DB_ID }}"
 
               # ================== staging environment =======================================
               [env.staging]
-              name = "lintrack-staging"
+              name = "${{vars.CF_WORKER_NAME_STAGING}}"
 
               [[env.staging.d1_databases]]
               binding = "DB"
-              database_name = "${{ vars.staging_db }}"
-              database_id = "${{ vars.staging_db_id }}"
+              database_name = "${{ vars.STAGING_DB }}"
+              database_id = "${{ vars.STAGING_DB_ID }}"
 
               # Workers Logs
               # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
@@ -70,7 +70,7 @@ jobs:
           command: "whoami"
 
       - name: Database Migrate
-        run: echo "y" | pnpm wrangler d1 migrations apply ${{ vars.main_db }} --env ${{ vars.main }} --remote
+        run: echo "y" | pnpm wrangler d1 migrations apply ${{ vars.MAIN_DB }} --env ${{ vars.MAIN }} --remote
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
@@ -78,4 +78,4 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: "deploy --env ${{ vars.main }}"
+          command: "deploy --env ${{ vars.MAIN }}"
