@@ -1,5 +1,5 @@
 {
-  "name": "lintrack",
+  "name": "cf-worker-example",
   "type": "module",
   "version": "0.0.1",
   "scripts": {

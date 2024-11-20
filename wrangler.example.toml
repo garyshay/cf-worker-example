@@ -1,35 +1,26 @@
 #:schema node_modules/wrangler/config-schema.json
-name = "lintrack"
+name = "${{vars.CF_WORKER_NAME_PROD}}"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat_v2"]
 main = "dist/_worker.js/index.js"
 
 # ================== production environment ====================================
 [env.prod]
-name = "lintrack"
+name = "${{vars.CF_WORKER_NAME_PROD}}"
 
 [[env.prod.d1_databases]]
 binding = "DB"
-database_name = "lintrack-prod-db"
-database_id = "ca0e8d8b-0d5a-4c8d-8aab-d2523e960cb9"
+database_name = "${{ vars.MAIN_DB }}"
+database_id = "${{ vars.MAIN_DB_ID }}"
 
 # ================== staging environment =======================================
 [env.staging]
-name = "lintrack-staging"
+name = "${{vars.CF_WORKER_NAME_STAGING}}"
 
 [[env.staging.d1_databases]]
 binding = "DB"
-database_name = "lintrack-staging-db"
-database_id = "21dca118-4ced-4fdb-8b55-e2b61b21cfdc"
-
-# ================== dev environment ===========================================
-[env.dev]
-name = "lintrack-dev"
-
-[[env.dev.d1_databases]]
-binding = "DB"
-database_name = "lintrack-dev-db"
-database_id = "${lintrack_dev_db}"
+database_name = "${{ vars.STAGING_DB }}"
+database_id = "${{ vars.STAGING_DB_ID }}"
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/

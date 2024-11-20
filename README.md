@@ -1,25 +1,50 @@
-# Lintrack
+# cf-worker-example
 
-```
-pnpm wrangler d1 create d1-demo-prod-db
-pnpm wrangler d1 create d1-demo-staging-db
-```
+## Clone This Project
+```shell
+git clone https://github.com/garyshay/cf-worker-example.git
+``` 
+## Creating a Cloudflare API Token with Edit Cloudflare Workers and D1 Permissions
+1. Visit the [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens) page.  
+2. Click **Create Token**.  
+3. Under the **Edit Cloudflare Workers** template, click **Use template**.  
+4. Change the **Token Name** to `Edit Cloudflare Workers:date:purpose` (e.g., `Edit Cloudflare Workers:2024-11-20:yourreponame`).  
+5. In the **Permissions** section, click **Add more**.  
+6. Select **D1 Edit** permission.  
+7. Under **Account Resources**, choose your account.  
+8. Under **Zone Resources**, select **All zones**.  
+9. Review the details and click to create the API Token.
 
-## DB
-1. create   on web ui
-2. migrate  
-3. bind     on web ui
+## Create D1 Databases
 
-## prod
-1. create worker on cloudflare web ui
-2. settings/general/build/git repo connect 
-3. Build command `pnpm build`
-4. Deploy command `npx wrangler deploy --env prod`
-5. settings/Domains & Routes/ Add Domain
+1. Create two D1 databases:
+   - One with a `-prod` suffix, e.g., `cf-worker-example-prod`
+   - Another with a `-staging` suffix, e.g., `cf-worker-example-staging`
+   
+2. Record the **name** and **ID** of each database:
+   - For example:
+     - **Database Name**: `cf-worker-example-prod`
+     - **Database ID**: `<cf-worker-example-prod's ID>`
+     - **Database Name**: `cf-worker-example-staging`
+     - **Database ID**: `<cf-worker-example-staging's ID>`
+## Configure GitHub Actions Secrets and Variables
 
+### 1. Configure Secrets:
+   - Add `CLOUDFLARE_API_TOKEN` and set its value to your Cloudflare API Token:
+     ```bash
+     CLOUDFLARE_API_TOKEN=your CLOUDFLARE_API_TOKEN
+     ```
 
-## staging
-1. create worker on cloudflare web ui
-2. settings/general/build/git repo connect 
-3. Build command `pnpm build`
-4. Deploy command `npx wrangler deploy --env staging`
+### 2. Configure Variables:
+   - Add the following variables:
+
+     ```
+     CF_WORKER_NAME_PROD=your cf worker name for prod
+     CF_WORKER_NAME_STAGING=your cf worker name for staging
+     MAIN=prod
+     MAIN_DB=cf-worker-example-prod
+     MAIN_DB_ID=<cf-worker-example-prod's ID>
+     STAGING=staging
+     STAGING_DB=cf-worker-example-staging
+     STAGING_DB_ID=<cf-worker-example-staging's ID>
+     ```
