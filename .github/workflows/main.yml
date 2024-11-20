@@ -61,13 +61,12 @@ jobs:
           ENDOFFILE
 
       - name: Build
-        run: |
-          pnpm build
-          pnpm wrangler d1 migrations apply --remote --env ${{ vars.main }} ${{ vars.main_db }}
+        run:  pnpm build
 
       - name: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           command: |
+            d1 migrations apply --remote --env ${{ vars.main }} ${{ vars.main_db }}
             deploy --env ${{ vars.main }}
