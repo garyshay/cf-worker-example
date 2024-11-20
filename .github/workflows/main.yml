@@ -68,5 +68,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           command: |
-            d1 migrations apply --env ${{ vars.main }} ${{ vars.main_db }}  --remote
+            d1 migrations apply ${{ vars.main_db }}  --env ${{ vars.main }}  --remote
             deploy --env ${{ vars.main }}
