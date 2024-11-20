@@ -63,10 +63,19 @@ jobs:
       - name: Build
         run:  pnpm build
 
+      - name: whoami
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: "whoami"
+
+      - name: Database Migrate
+        run: echo "y" | pnpm wrangler d1 migrations apply ${{ vars.main_db }} --env ${{ vars.main }} --remote
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
       - name: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          command: |
-            d1 migrations apply ${{ vars.main_db }}  --env ${{ vars.main }}  --remote
-            deploy --env ${{ vars.main }}
+          command: "deploy --env ${{ vars.main }}"
